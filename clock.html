@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spiral Clock Web App</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        #app-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        #clock-container {
+            position: relative;
+            width: 600px;
+            height: 600px;
+        }
+        #clock-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        .clock-hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom center;
+            background-color: white;
+            z-index: 2;
+            transition: transform 0.1s linear; /* Smooth movement */
+        }
+        #hour-hand {
+            width: 8px;
+            height: 120px;
+            margin-left: -4px;
+        }
+        #minute-hand {
+            width: 4px;
+            height: 160px;
+            margin-left: -2px;
+        }
+        #second-hand {
+            width: 2px;
+            height: 180px;
+            margin-left: -1px;
+            background-color: red;
+        }
+        #progress-container {
+            position: relative;
+            width: 50px;
+            height: 600px;
+            background-color: #333;
+            margin-left: 20px;
+        }
+        #progress-bar {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background-color: #023167; /* Default color */
+            transition: height 1s linear; /* Smooth height change */
+        }
+        .pomodoro-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: white;
+            z-index: 3;
+        }
+        #break-bar {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background-color: #FFD700; /* Yellow for break */
+            display: none;
+            transition: height 1s linear;
+        }
+        #current-time {
+            position: absolute;
+            bottom: -40px;
+            width: 600px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="app-container">
+        <div id="clock-container">
+            <img id="clock-image" src="1000025088.png" alt="Spiral Clock Background">
+            <div id="hour-hand" class="clock-hand"></div>
+            <div id="minute-hand" class="clock-hand"></div>
+            <div id="second-hand" class="clock-hand"></div>
+        </div>
+        <div id="progress-container">
+            <div id="progress-bar"></div>
+            <div id="break-bar"></div>
+        </div>
+        <div id="current-time"></div>
+    </div>
+
+    <script>
+        // Define the schedule with start and end times
+        function getCurrentTask(time) {
+            const hours = time.getHours();
+            const minutes = time.getMinutes();
+            const totalMinutes = hours * 60 + minutes;
+            let task, color, startTime, endTime;
+
+            if (totalMinutes >= 11*60 && totalMinutes < 14*60) {
+                task = 'Study';
+                color = '#023167';
+                startTime = new Date(time);
+                startTime.setHours(11, 0, 0, 0);
+                endTime = new Date(time);
+                endTime.setHours(14, 0, 0, 0);
+            } else if (totalMinutes >= 17*60 && totalMinutes < 19*60) {
+                task = 'Study';
+                color = '#023167';
+                startTime = new Date(time);
+                startTime.setHours(17, 0, 0, 0);
+                endTime = new Date(time);
+                endTime.setHours(19, 0, 0, 0);
+            } else if (totalMinutes >= 20*60 && totalMinutes < 21*60) {
+                task = 'Study';
+                color = '#023167';
+                startTime = new Date(time);
+                startTime.setHours(20, 0, 0, 0);
+                endTime = new Date(time);
+                endTime.setHours(21, 0, 0, 0);
+            } else if (totalMinutes >= 22*60 || totalMinutes < 3*60) {
+                task = 'Study';
+                color = '#023167';
+                if (totalMinutes >= 22*60) {
+                    startTime = new Date(time);
+                    startTime.setHours(22, 0, 0, 0);
+                    endTime = new Date(time);
+                    endTime.setDate(endTime.getDate() + 1);
+                    endTime.setHours(3, 0, 0, 0);
+                } else {
+                    startTime = new Date(time);
+                    startTime.setDate(startTime.getDate() - 1);
+                    startTime.setHours(22, 0, 0, 0);
+                    endTime = new Date(time);
+                    endTime.setHours(3, 0, 0, 0);
+                }
+            } else if (totalMinutes >= 3*60 && totalMinutes < 9*60) {
+                task = 'Sleep';
+                color = '#0F0D12';
+                startTime = new Date(time);
+                startTime.setHours(3, 0, 0, 0);
+                endTime = new Date(time);
+                endTime.setHours(9, 0, 0, 0);
+            } else if (totalMinutes >= 9*60 && totalMinutes < 10*60) {
+                task = 'Other';
+                color = '#99788D';
+                startTime = new Date(time);
+                startTime.setHours(9, 0, 0, 0);
+                endTime = new Date(time);
+                endTime.setHours(10, 0, 0, 0);
+            } else if (totalMinutes >= 10*60 && totalMinutes < 11*60) {
+                task = 'Food';
+                color = '#A61B08';
+                startTime = new Date(time);
+                startTime.setHours(10, 0, 0, 0);
+                endTime = new Date(time);
+                endTime.setHours(11, 0, 0, 0);
+            } else if (totalMinutes >= 14*60 && totalMinutes < 15*60) {
+                task = 'Food';
+                color = '#A61B08';
+                startTime = new Date(time);
+                startTime.setHours(14, 0, 0, 0);
+                endTime = new Date(time);
+                endTime.setHours(15, 0, 0, 0);
+            } else if (totalMinutes >= 15*60 && totalMinutes < 17*60) {
+                task = 'Sleep';
+                color = '#0F0D12';
+                startTime = new Date(time);
+                startTime.setHours(15, 0, 0, 0);
+                endTime = new Date(time);
+                endTime.setHours(17, 0, 0, 0);
+            } else if (totalMinutes >= 19*60 && totalMinutes < 20*60) {
+                task = 'Other';
+                color = '#99788D';
+                startTime = new Date(time);
+                startTime.setHours(19, 0, 0, 0);
+                endTime = new Date(time);
+                endTime.setHours(20, 0, 0, 0);
+            } else if (totalMinutes >= 21*60 && totalMinutes < 22*60) {
+                task = 'Food';
+                color = '#A61B08';
+                startTime = new Date(time);
+                startTime.setHours(21, 0, 0, 0);
+                endTime = new Date(time);
+                endTime.setHours(22, 0, 0, 0);
+            }
+
+            return { task, color, startTime, endTime };
+        }
+
+        let previousTask = null;
+
+        function updateClock() {
+            const now = new Date();
+            const seconds = now.getSeconds();
+            const minutes = now.getMinutes();
+            const hours = now.getHours();
+
+            // Calculate rotation angles for clock hands
+            const secondDegree = (seconds / 60) * 360;
+            const minuteDegree = (minutes / 60) * 360 + (seconds / 60) * 6;
+            const hourDegree = (hours % 12 / 12) * 360 + (minutes / 60) * 30;
+
+            // Apply rotations
+            document.getElementById('second-hand').style.transform = `rotate(${secondDegree}deg)`;
+            document.getElementById('minute-hand').style.transform = `rotate(${minuteDegree}deg)`;
+            document.getElementById('hour-hand').style.transform = `rotate(${hourDegree}deg)`;
+
+            // Update current time display
+            document.getElementById('current-time').textContent = now.toLocaleTimeString();
+        }
+
+        function updateProgressBar() {
+            const now = new Date();
+            const { task, color, startTime, endTime } = getCurrentTask(now);
+            const progressBar = document.getElementById('progress-bar');
+            const breakBar = document.getElementById('break-bar');
+            const progressContainer = document.getElementById('progress-container');
+
+            // Remove existing pomodoro lines
+            document.querySelectorAll('.pomodoro-line').forEach(line => line.remove());
+
+            if (task) {
+                const totalDuration = (endTime - startTime) / 1000 / 60; // minutes
+                const elapsedTime = (now - startTime) / 1000 / 60;
+                const remainingTime = (endTime - now) / 1000 / 60;
+                const percentageLeft = (remainingTime / totalDuration) * 100;
+
+                // Update progress bar
+                progressBar.style.height = `${percentageLeft}%`;
+                progressBar.style.backgroundColor = color;
+
+                // Pomodoro feature for study time
+                if (task === 'Study') {
+                    const minutesSinceStart = elapsedTime;
+                    const totalMinutes = totalDuration;
+                    const pomodoroInterval = 30; // 30 minutes
+                    const breakDuration = 5; // 5 minutes
+
+                    // Add lines every 30 minutes
+                    for (let i = pomodoroInterval; i < totalMinutes; i += pomodoroInterval) {
+                        const percentageAtInterval = ((totalMinutes - i) / totalMinutes) * 100;
+                        if (percentageAtInterval <= percentageLeft) {
+                            const line = document.createElement('div');
+                            line.className = 'pomodoro-line';
+                            line.style.bottom = `${percentageAtInterval}%`;
+                            progressContainer.appendChild(line);
+
+                            // Check if in the last 5 minutes of this 30-min block
+                            const timeUntilNextInterval = (i - minutesSinceStart);
+                            if (timeUntilNextInterval > 0 && timeUntilNextInterval <= breakDuration) {
+                                const breakPercentage = (timeUntilNextInterval / breakDuration) * (pomodoroInterval / totalMinutes) * 100;
+                                breakBar.style.height = `${breakPercentage}%`;
+                                breakBar.style.display = 'block';
+                            } else {
+                                breakBar.style.display = 'none';
+                            }
+                        }
+                    }
+                } else {
+                    breakBar.style.display = 'none';
+                }
+
+                // Notification when task changes
+                if (previousTask !== task) {
+                    previousTask = task;
+                    if (Notification.permission === 'granted') {
+                        new Notification(`Task changed to ${task}`);
+                    }
+                }
+            } else {
+                progressBar.style.height = '0%';
+                breakBar.style.display = 'none';
+            }
+        }
+
+        // Request notification permission
+        Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+                console.log('Notification permission granted.');
+            }
+        });
+
+        // Update every second
+        setInterval(() => {
+            updateClock();
+            updateProgressBar();
+        }, 1000);
+
+        // Initial update
+        updateClock();
+        updateProgressBar();
+    </script>
+</body>
+</html>
