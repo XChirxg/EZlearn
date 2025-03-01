@@ -41,23 +41,28 @@
             transform-origin: bottom center;
             background-color: white;
             z-index: 2;
-            transition: transform 0.1s linear; /* Smooth movement */
+            /* Added shadow */
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
         }
         #hour-hand {
             width: 8px;
             height: 120px;
             margin-left: -4px;
+            transition: transform 0.1s linear;
         }
         #minute-hand {
             width: 4px;
             height: 160px;
             margin-left: -2px;
+            transition: transform 0.1s linear;
         }
         #second-hand {
             width: 2px;
             height: 180px;
             margin-left: -1px;
             background-color: red;
+            /* Smooth continuous movement for seconds */
+            transition: transform 0s linear;
         }
         #progress-container {
             position: relative;
@@ -70,8 +75,8 @@
             position: absolute;
             bottom: 0;
             width: 100%;
-            background-color: #023167; /* Default color */
-            transition: height 1s linear; /* Smooth height change */
+            background-color: #023167;
+            transition: height 1s linear;
         }
         .pomodoro-line {
             position: absolute;
@@ -84,15 +89,35 @@
             position: absolute;
             bottom: 0;
             width: 100%;
-            background-color: #FFD700; /* Yellow for break */
+            background-color: #FFD700;
             display: none;
             transition: height 1s linear;
         }
         #current-time {
             position: absolute;
-            bottom: -40px;
+            bottom: -60px; /* Adjusted for extra time line */
             width: 600px;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        #fullscreen-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            font-size: 14px;
+            padding: 0;
+            cursor: pointer;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            border-radius: 50%;
+        }
+        #fullscreen-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
         }
     </style>
 </head>
@@ -108,7 +133,11 @@
             <div id="progress-bar"></div>
             <div id="break-bar"></div>
         </div>
-        <div id="current-time"></div>
+        <div id="current-time">
+            <span id="time-12"></span>
+            <span id="time-24"></span>
+        </div>
+        <button id="fullscreen-btn" title="Toggle Fullscreen">⤢</button>
     </div>
 
     <script>
@@ -214,7 +243,7 @@
 
         function updateClock() {
             const now = new Date();
-            const seconds = now.getSeconds();
+            const seconds = now.getSeconds() + now.getMilliseconds() / 1000; // For smooth movement
             const minutes = now.getMinutes();
             const hours = now.getHours();
 
@@ -228,8 +257,21 @@
             document.getElementById('minute-hand').style.transform = `rotate(${minuteDegree}deg)`;
             document.getElementById('hour-hand').style.transform = `rotate(${hourDegree}deg)`;
 
-            // Update current time display
-            document.getElementById('current-time').textContent = now.toLocaleTimeString();
+            // Update time displays
+            const time12 = now.toLocaleTimeString('en-US', { 
+                hour12: true, 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            });
+            const time24 = now.toLocaleTimeString('en-US', { 
+                hour12: false, 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            });
+            document.getElementById('time-12').textContent = time12;
+            document.getElementById('time-24').textContent = time24;
         }
 
         function updateProgressBar() {
@@ -243,23 +285,20 @@
             document.querySelectorAll('.pomodoro-line').forEach(line => line.remove());
 
             if (task) {
-                const totalDuration = (endTime - startTime) / 1000 / 60; // minutes
+                const totalDuration = (endTime - startTime) / 1000 / 60;
                 const elapsedTime = (now - startTime) / 1000 / 60;
                 const remainingTime = (endTime - now) / 1000 / 60;
                 const percentageLeft = (remainingTime / totalDuration) * 100;
 
-                // Update progress bar
                 progressBar.style.height = `${percentageLeft}%`;
                 progressBar.style.backgroundColor = color;
 
-                // Pomodoro feature for study time
                 if (task === 'Study') {
                     const minutesSinceStart = elapsedTime;
                     const totalMinutes = totalDuration;
-                    const pomodoroInterval = 30; // 30 minutes
-                    const breakDuration = 5; // 5 minutes
+                    const pomodoroInterval = 30;
+                    const breakDuration = 5;
 
-                    // Add lines every 30 minutes
                     for (let i = pomodoroInterval; i < totalMinutes; i += pomodoroInterval) {
                         const percentageAtInterval = ((totalMinutes - i) / totalMinutes) * 100;
                         if (percentageAtInterval <= percentageLeft) {
@@ -268,7 +307,6 @@
                             line.style.bottom = `${percentageAtInterval}%`;
                             progressContainer.appendChild(line);
 
-                            // Check if in the last 5 minutes of this 30-min block
                             const timeUntilNextInterval = (i - minutesSinceStart);
                             if (timeUntilNextInterval > 0 && timeUntilNextInterval <= breakDuration) {
                                 const breakPercentage = (timeUntilNextInterval / breakDuration) * (pomodoroInterval / totalMinutes) * 100;
@@ -283,7 +321,6 @@
                     breakBar.style.display = 'none';
                 }
 
-                // Notification when task changes
                 if (previousTask !== task) {
                     previousTask = task;
                     if (Notification.permission === 'granted') {
@@ -296,6 +333,18 @@
             }
         }
 
+        // Fullscreen functionality
+        const fullscreenBtn = document.getElementById('fullscreen-btn');
+        fullscreenBtn.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        });
+
         // Request notification permission
         Notification.requestPermission().then(permission => {
             if (permission === 'granted') {
@@ -303,11 +352,11 @@
             }
         });
 
-        // Update every second
+        // Update every 50ms for smoother second hand
         setInterval(() => {
             updateClock();
             updateProgressBar();
-        }, 1000);
+        }, 50);
 
         // Initial update
         updateClock();
