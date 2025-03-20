@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcard Generator (3x3 with Proper Alignment)</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="cards.css">
+</head>
+<body>
+    <div class="controls">
+        <h1>Flashcard Generator (3x3)</h1>
+        <p>Preview your cards below and download as PDF for printing</p>
+        <button id="download-btn">Download PDF</button>
+        <button id="toggle-view">Show Card Backs</button>
+    </div>
+    
+    <div class="preview" id="preview">
+        <!-- Front Page -->
+        <div class="page" id="front-page">
+            <div class="page-label no-print">FRONT PAGE</div>
+            <div class="card-container">
+                <!-- Row 1 -->
+                <!-- Card 1 Front -->
+                <div class="card">
+                    <div class="card-content card-1-front">
+                        <div class="card-number no-print">1</div>
+                        <h2>HTML Basics</h2>
+                        <p>What are the essential elements of an HTML document?</p>
+                    </div>
+                </div>
+                
+                <!-- Card 2 Front -->
+                <div class="card">
+                    <div class="card-content card-2-front">
+                        <div class="card-number no-print">2</div>
+                        <h2>CSS Selectors</h2>
+                        <p>Name the different types of CSS selectors</p>
+                    </div>
+                </div>
+                
+                <!-- Card 3 Front -->
+                <div class="card">
+                    <div class="card-content card-3-front">
+                        <div class="card-number no-print">3</div>
+                        <div class="card-header">JavaScript</div>
+                        <div class="card-body">
+                            <p>What is the difference between let, const, and var?</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Row 2 -->
+                <!-- Card 4 Front -->
+                <div class="card">
+                    <div class="card-content card-4-front">
+                        <div class="card-number no-print">4</div>
+                        <div class="title">Math Formulas</div>
+                        <p>What is the formula for calculating the area of a circle?</p>
+                    </div>
+                </div>
+                
+                <!-- Card 5 Front -->
+                <div class="card">
+                    <div class="card-content card-5-front">
+                        <div class="card-number no-print">5</div>
+                        <div class="question-box">
+                            <p>Name the capitals of the following countries:</p>
+                            <p>France, Japan, Brazil</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card 6 Front -->
+                <div class="card">
+                    <div class="card-content card-6-front">
+                        <div class="card-number no-print">6</div>
+                        <h2>Python Basics</h2>
+                        <p>How do you create a function in Python?</p>
+                    </div>
+                </div>
+                
+                <!-- Row 3 -->
+                <!-- Card 7 Front -->
+                <div class="card">
+                    <div class="card-content card-7-front">
+                        <div class="card-number no-print">7</div>
+                        <h2>Data Types</h2>
+                        <p>What are primitive data types in JavaScript?</p>
+                    </div>
+                </div>
+                
+                <!-- Card 8 Front -->
+                <div class="card">
+                    <div class="card-content card-8-front">
+                        <div class="card-number no-print">8</div>
+                        <div class="icon">🌍</div>
+                        <h3>Planet Earth</h3>
+                        <p>What are the key facts about Earth?</p>
+                    </div>
+                </div>
+                
+                <!-- Card 9 Front -->
+                <div class="card">
+                    <div class="card-content card-9-front">
+                        <div class="card-number no-print">9</div>
+                        <div class="card-title">Historical Events</div>
+                        <p>What were the key events in World War II?</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Back Page (initially hidden) -->
+        <div class="page" id="back-page" style="display:none;">
+            <div class="page-label no-print">BACK PAGE</div>
+            <div class="card-container">
+                <!-- Row 1 (original order, but each card flipped 180° when printing) -->
+                <!-- Card 3 Back -->
+                <div class="card">
+                    <div class="card-content card-3-back">
+                        <div class="card-number no-print">3B</div>
+                        <div>
+                            <p><strong>var:</strong> Function scoped</p>
+                            <p><strong>let:</strong> Block scoped</p>
+                            <p><strong>const:</strong> Block scoped, cannot be reassigned</p>
+                        </div>
+                        <div class="note">const objects can still have properties modified</div>
+                    </div>
+                </div>
+                
+                <!-- Card 2 Back -->
+                <div class="card">
+                    <div class="card-content card-2-back">
+                        <div class="card-number no-print">2B</div>
+                        <h3>CSS Selectors</h3>
+                        <table>
+                            <tr>
+                                <th>Type</th>
+                                <th>Example</th>
+                            </tr>
+                            <tr>
+                                <td>Element</td>
+                                <td>p { }</td>
+                            </tr>
+                            <tr>
+                                <td>Class</td>
+                                <td>.class { }</td>
+                            </tr>
+                            <tr>
+                                <td>ID</td>
+                                <td>#id { }</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Card 1 Back -->
+                <div class="card">
+                    <div class="card-content card-1-back">
+                        <div class="card-number no-print">1B</div>
+                        <h3>HTML Structure</h3>
+                        <ul>
+                            <li>DOCTYPE declaration</li>
+                            <li>HTML element</li>
+                            <li>HEAD element</li>
+                            <li>BODY element</li>
+                            <li>Meta tags</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Row 2 (original order, but each card flipped 180° when printing) -->
+                <!-- Card 6 Back -->
+                <div class="card">
+                    <div class="card-content card-6-back">
+                        <div class="card-number no-print">6B</div>
+                        <h3>Python Function</h3>
+                        <ol class="steps">
+                            <li>Use the 'def' keyword</li>
+                            <li>Name your function</li>
+                            <li>Add parameters in ()</li>
+                            <li>End with a colon :</li>
+                            <li>Add indented code block</li>
+                            <li>Use 'return' statement</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <!-- Card 5 Back -->
+                <div class="card">
+                    <div class="card-content card-5-back">
+                        <div class="card-number no-print">5B</div>
+                        <div class="answer">
+                            <p>France: Paris</p>
+                            <p>Japan: Tokyo</p>
+                            <p>Brazil: Brasília</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card 4 Back -->
+                <div class="card">
+                    <div class="card-content card-4-back">
+                        <div class="card-number no-print">4B</div>
+                        <h3>Area of a Circle</h3>
+                        <div class="formula">A = π × r²</div>
+                        <p>Where:</p>
+                        <p>A = area</p>
+                        <p>r = radius</p>
+                        <p>π ≈ 3.14159</p>
+                    </div>
+                </div>
+                
+                <!-- Row 3 (original order, but each card flipped 180° when printing) -->
+                <!-- Card 9 Back -->
+                <div class="card">
+                    <div class="card-content card-9-back">
+                        <div class="card-number no-print">9B</div>
+                        <h3>Key WWII Events</h3>
+                        <div class="timeline">
+                            <div class="timeline-item">1939: Germany invades Poland</div>
+                            <div class="timeline-item">1941: Pearl Harbor attack</div>
+                            <div class="timeline-item">1944: D-Day landings</div>
+                            <div class="timeline-item">1945: End of war in Europe</div>
+                            <div class="timeline-item">1945: Atomic bombs dropped</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card 8 Back -->
+                <div class="card">
+                    <div class="card-content card-8-back">
+                        <div class="card-number no-print">8B</div>
+                        <h3>Earth Facts</h3>
+                        <div class="info-grid">
+                            <div>Diameter:</div>
+                            <div>12,742 km</div>
+                            <div>Surface:</div>
+                            <div>71% water</div>
+                            <div>Atmosphere:</div>
+                            <div>78% nitrogen</div>
+                            <div>Moons:</div>
+                            <div>1</div>
+                            <div>Age:</div>
+                            <div>4.5 billion years</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card 7 Back -->
+                <div class="card">
+                    <div class="card-content card-7-back">
+                        <div class="card-number no-print">7B</div>
+                        <h3>JavaScript Primitive Types</h3>
+                        <div class="code">
+                            1. String
+                            2. Number
+                            3. Boolean
+                            4. Undefined
+                            5. Null
+                            6. Symbol
+                            7. BigInt
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,278 @@
+
+/* Custom card styles */
+
+/* Card 1 */
+.card-1-front {
+    background-color: #f8f9fa;
+}
+
+.card-1-front h2 {
+    color: #0066cc;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.card-1-back {
+    background-color: #e6f2ff;
+}
+
+.card-1-back h3 {
+    color: #004d99;
+    font-size: 18px;
+}
+
+.card-1-back ul {
+    text-align: left;
+    margin: 8px 0;
+    padding-left: 18px;
+}
+
+/* Card 2 */
+.card-2-front {
+    background-color: #f9f2f4;
+    background-image: url('/api/placeholder/180/90');
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-size: 80%;
+    padding-top: 100px;
+}
+
+.card-2-front h2 {
+    color: #c7254e;
+    margin-top: 8px;
+}
+
+.card-2-back {
+    background-color: #f9ecef;
+}
+
+.card-2-back table {
+    width: 90%;
+    border-collapse: collapse;
+    margin: 8px auto;
+}
+
+.card-2-back table, .card-2-back th, .card-2-back td {
+    border: 1px solid #ddd;
+}
+
+.card-2-back th, .card-2-back td {
+    padding: 4px;
+    text-align: center;
+}
+
+/* Card 3 */
+.card-3-front {
+    background-color: #eaf7ea;
+}
+
+.card-3-front .card-header {
+    background-color: #28a745;
+    color: white;
+    padding: 8px 0;
+    margin-top: -8px;
+    width: 100%;
+}
+
+.card-3-back {
+    background-color: #f0f9f0;
+}
+
+.card-3-back .note {
+    font-style: italic;
+    font-size: 12px;
+    margin-top: 15px;
+    color: #666;
+}
+
+/* Card 4 */
+.card-4-front {
+    background-color: #fff3cd;
+}
+
+.card-4-front .title {
+    font-weight: bold;
+    color: #856404;
+    font-size: 18px;
+    border-bottom: 2px solid #ffeeba;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    width: 80%;
+}
+
+.card-4-back {
+    background-color: #fff9e6;
+}
+
+.card-4-back .formula {
+    font-family: "Courier New", monospace;
+    border: 1px dashed #856404;
+    padding: 5px 10px;
+    background: #fffbf0;
+    margin: 10px 0;
+}
+
+/* Card 5 */
+.card-5-front {
+    background-color: #f8d7da;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-5-front .question-box {
+    border: 2px solid #dc3545;
+    border-radius: 5px;
+    padding: 10px;
+    width: 80%;
+    background-color: #fff;
+}
+
+.card-5-back {
+    background-color: #f8d7da;
+    background-image: url('/api/placeholder/150/150');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: relative;
+}
+
+.card-5-back .answer {
+    position: absolute;
+    bottom: 10px;
+    background-color: rgba(255,255,255,0.8);
+    width: 90%;
+    padding: 8px;
+    border-radius: 5px;
+    left: 5%;
+}
+
+/* Card 6 */
+.card-6-front {
+    background-color: #d1ecf1;
+    position: relative;
+}
+
+.card-6-front::after {
+    content: "?";
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    font-size: 40px;
+    color: #17a2b8;
+    opacity: 0.3;
+}
+
+.card-6-back {
+    background-color: #d1ecf1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-6-back .steps {
+    text-align: left;
+    padding-left: 25px;
+}
+
+/* Card 7 */
+.card-7-front {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.card-7-front h2 {
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+.card-7-back {
+    background-color: #f0f0f0;
+}
+
+.card-7-back .code {
+    font-family: "Courier New", monospace;
+    background-color: #333;
+    color: #f8f8f8;
+    padding: 8px;
+    border-radius: 5px;
+    width: 85%;
+    text-align: left;
+    font-size: 12px;
+}
+
+/* Card 8 */
+.card-8-front {
+    background-color: #ffe2d1;
+}
+
+.card-8-front .icon {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.card-8-back {
+    background-color: #fff5ee;
+}
+
+.card-8-back .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+    margin: 10px;
+    text-align: left;
+}
+
+.card-8-back .info-grid div:nth-child(odd) {
+    font-weight: bold;
+    color: #d35400;
+}
+
+/* Card 9 */
+.card-9-front {
+    background-color: #e9ecef;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-9-front .card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.card-9-back {
+    background-color: #f2f2f2;
+}
+
+.card-9-back .timeline {
+    position: relative;
+    margin: 0 auto;
+    padding-left: 25px;
+    text-align: left;
+}
+
+.card-9-back .timeline::before {
+    content: '';
+    position: absolute;
+    height: 80%;
+    width: 2px;
+    background-color: #adb5bd;
+    left: 8px;
+    top: 10%;
+}
+
+.card-9-back .timeline-item {
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.card-9-back .timeline-item::before {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #6c757d;
+    left: -20px;
+    top: 5px;
+}
